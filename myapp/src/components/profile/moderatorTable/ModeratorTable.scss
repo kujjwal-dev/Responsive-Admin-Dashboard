@@ -1,0 +1,66 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Manrope:wght@200;300;400;500;600;700;800&display=swap");
+
+/*** DataTable specific styles ***/
+.data-table-container {
+  padding: 20px;
+  background-color: var(--background-color);
+  border-radius: 10px;
+  box-shadow: var(--light-shadow1);
+  color: var(--base-text-color);
+  
+  .search-bar {
+    margin-bottom: 20px;
+
+    .MuiTextField-root {
+      flex: 1;
+      background-color: var(--bg-color-inverted);
+      color: var(--text-color-inverted);
+
+      .MuiInputBase-root {
+        color: var(--text-color-inverted);
+      }
+
+      .MuiOutlinedInput-notchedOutline {
+        border-color: var(--tbl-border-color);
+      }
+    }
+  }
+
+  .MuiDataGrid-root {
+    background-color: var(--secondary-color);
+    border-radius: 10px;
+    border: 1px solid var(--tbl-border-color);
+
+    .MuiDataGrid-cell {
+      border-bottom: 1px solid var(--tbl-border-color);
+      color: var(--base-text-color);
+    }
+
+    .MuiDataGrid-columnHeaders {
+      background-color: #383854;
+      color: #0000;
+      font-family: var(--font-family-manrope);
+      font-size: 1rem;
+      font-weight: bold;
+    }
+
+    .MuiDataGrid-columnHeaderTitle {
+      color: #292929;
+    }
+
+    .MuiCheckbox-root {
+      color: var(--primary-color) !important;
+    }
+
+    .MuiDataGrid-footerContainer {
+      background-color: var(--secondary-color);
+      color: var(--base-text-color);
+    }
+
+    .MuiTablePagination-root {
+      .MuiButtonBase-root {
+        color: var(--primary-color);
+      }
+    }
+  }
+}

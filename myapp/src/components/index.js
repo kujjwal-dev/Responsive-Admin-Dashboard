@@ -3,3 +3,8 @@ export { default as AreaCards } from "./dashboard/areaCards/AreaCards";
 export { default as AreaCharts } from "./dashboard/areaCharts/AreaCharts";
 export { default as AreaTable } from "./dashboard/areaTable/AreaTable";
 export { default as AreaTop } from "./dashboard/areaTop/AreaTop";
+export { default as ProfileTop } from "./profile/profileTop/ProfileTop";
+export { default as AdminForm } from "./profile/adminForm/AdminForm";
+export { default as AdminTable } from "./profile/adminTable/AdminTable";
+export { default as ModeratorForm } from "./profile/moderatorForm/ModeratorForm" ;
+export { default as ModeratorTable }  from "./profile/moderatorTable/ModeratorTable";
