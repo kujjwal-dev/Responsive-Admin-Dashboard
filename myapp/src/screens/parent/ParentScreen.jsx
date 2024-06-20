@@ -1,9 +1,13 @@
 import React from 'react'
+import { ParentTop, ParentTable } from "../../components"
 
 const ParentScreen = () => {
   return (
-    <div>ParentScreen</div>
+    <div className='content-area'>
+      <ParentTop/>
+      <ParentTable/>
+    </div>
   )
 }
 
-export default ParentScreen
+export default ParentScreen;

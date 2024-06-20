@@ -62,7 +62,7 @@ const AdminTable
           rows={filteredData}
           columns={columns}
           pageSize={5}
-          rowsPerPageOptions={[5,10,20]}
+          rowsPerPageOptions={[25,50,100]}
           components={{ Toolbar: GridToolbar }}
           disableSelectionOnClick
           disableColumnMenu

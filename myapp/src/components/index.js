@@ -8,3 +8,5 @@ export { default as AdminForm } from "./profile/adminForm/AdminForm";
 export { default as AdminTable } from "./profile/adminTable/AdminTable";
 export { default as ModeratorForm } from "./profile/moderatorForm/ModeratorForm" ;
 export { default as ModeratorTable }  from "./profile/moderatorTable/ModeratorTable";
+export { default as ParentTop } from "./parent/parentTop/ParentTop" ;
+export { default as ParentTable }  from "./parent/parentTable/ParentTable";
