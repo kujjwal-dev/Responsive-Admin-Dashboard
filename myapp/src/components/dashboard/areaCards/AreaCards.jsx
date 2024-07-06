@@ -17,9 +17,9 @@ const AreaCards = () => {
         colors={["#e4e8ef", "#4ce13f"]}
         percentFillValue={50}
         cardInfo={{
-          title: "Todays Revenue",
-          value: "$8.2K",
-          text: "Available to payout",
+          title: "Content Searches",
+          value: "1678",
+          text: "1678 Content Searches",
         }}
       />
       <AreaCard

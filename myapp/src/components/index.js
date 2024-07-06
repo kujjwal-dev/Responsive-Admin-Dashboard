@@ -10,3 +10,5 @@ export { default as ModeratorForm } from "./profile/moderatorForm/ModeratorForm"
 export { default as ModeratorTable }  from "./profile/moderatorTable/ModeratorTable";
 export { default as ParentTop } from "./parent/parentTop/ParentTop" ;
 export { default as ParentTable }  from "./parent/parentTable/ParentTable";
+export { default as CategoryTop } from "./category/categorytop/CartegoryTop";
+export { default as List } from "./category/List";

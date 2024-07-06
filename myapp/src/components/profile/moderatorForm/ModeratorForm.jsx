@@ -8,10 +8,12 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import Axios from "axios";
+import toast from "react-hot-toast";
 
 const initialValues = {
   Name: "",
@@ -37,6 +39,7 @@ const validationSchema = Yup.object({
 
 const ModeratorForm = () => {
   const [open, setOpen] = React.useState(false);
+  const [loading, setLoading] = useState(false);
   const functionOpenPopup = () => {
     setOpen(true);
   };
@@ -44,11 +47,31 @@ const ModeratorForm = () => {
     setOpen(false);
   };
 
-  const { values, handleChange, handleSubmit, errors, touched } = useFormik({
+  const { values, handleChange, handleSubmit, errors, touched , resetForm } = useFormik({
     initialValues: initialValues,
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: async (values) => {
+      setLoading(true);
+      try {
+        const createModeratorProfile = await Axios.post("http://localhost:3001/api/v1/auth/moderator_create_profile", {
+          name: values.Name,
+          phone: values.Phone,
+          email: values.Email,
+          address: values.Address,
+          pancard: values.Pancard,
+        }, {
+          withCredentials: true,
+        });
+        toast.success("Profile created successfully");
+        console.log(createModeratorProfile.data)
+        resetForm();
+        functionClosePopup();
+      } catch (error) {
+        toast.error("Failed to create profile")
+        console.error(error)
+      } finally {
+        setLoading(false)
+      }
     },
   });
 
@@ -132,8 +155,8 @@ const ModeratorForm = () => {
                 helperText={touched.Pancard && errors.Pancard}
               />
 
-              <Button type="submit" color="primary" variant="contained" sx={{ backgroundColor: "#475be8", '&:hover': { backgroundColor: "#3a4db7" } }}>
-                Submit
+              <Button type="submit" color="primary" variant="contained" sx={{ backgroundColor: "#475be8", '&:hover': { backgroundColor: "#3a4db7" } }} disabled={loading}>
+                {loading ? "Submitting...."  : "Submit" }
               </Button>
 
             </Stack>

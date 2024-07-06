@@ -13,6 +13,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import Axios from "axios";
+import toast from "react-hot-toast";
 
 const initialValues = {
   Name: "",
@@ -36,6 +38,7 @@ const validationSchema = Yup.object({
 
 const Moderator = () => {
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const functionOpenPopup = () => {
     setOpen(true);
   };
@@ -43,11 +46,31 @@ const Moderator = () => {
     setOpen(false);
   };
 
-  const { values, handleChange, handleSubmit, errors, touched } = useFormik({
+  const { values, handleChange, handleSubmit, errors, touched, resetForm } = useFormik({
     initialValues: initialValues,
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: async (values) => {
+      setLoading(true);
+      try {
+        const createAdminProfile = await Axios.post("http://localhost:3001/api/v1/auth/admin_create_profile", {
+          name: values.Name,
+          phone: values.Phone,
+          email: values.Email,
+          address: values.Address,
+          pancard: values.Pancard,
+        }, {
+          withCredentials: true,
+        });
+        toast.success("Profile created successfully");
+        console.log(createAdminProfile.data)
+        resetForm();
+        functionClosePopup();
+      } catch (error) {
+        toast.error("Failed to create profile")
+        console.error(error)
+      } finally {
+        setLoading(false)
+      }
     },
   });
 
@@ -134,8 +157,9 @@ const Moderator = () => {
                 type="submit"
                 variant="contained"
                 sx={{ backgroundColor: "#475be8", '&:hover': { backgroundColor: "#3a4db7" } }}
+                disabled={loading}
               >
-                Submit
+                {loading ? 'Submitting.......' : 'Submit'}
               </Button>
             </Stack>
           </form>
