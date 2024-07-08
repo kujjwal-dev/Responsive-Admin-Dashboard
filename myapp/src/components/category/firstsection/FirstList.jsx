@@ -22,7 +22,7 @@ export default function FirstList() {
         setLoading(true);
         setTimeout(() => {
             setLoading(false);
-        }, 5000); //to load some data after some seconds
+        }, 1000); //to load some data after some seconds
     }, []);
 
 

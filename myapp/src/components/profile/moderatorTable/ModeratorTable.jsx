@@ -10,17 +10,17 @@ const ModeratorTable
   const [searchText, setSearchText] = useState('');
   const [filteredData, setFilteredData] = useState([]);
 
-  useEffect(() => {
-    // Fetch data from a dummy API
-    axios.get('https://jsonplaceholder.typicode.com/users')
-      .then(response => {
-        setData(response.data);
-        setFilteredData(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching data: ', error);
-      });
-  }, []);
+  // useEffect(() => {
+  //   // Fetch data from a dummy API
+  //   axios.get('https://jsonplaceholder.typicode.com/users')
+  //     .then(response => {
+  //       setData(response.data);
+  //       setFilteredData(response.data);
+  //     })
+  //     .catch(error => {
+  //       console.error('Error fetching data: ', error);
+  //     });
+  // }, []);
 
   const handleSearch = (event) => {
     const value = event.target.value.toLowerCase();
@@ -39,11 +39,12 @@ const ModeratorTable
   };
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 70 },
+    { field: 'id', headerName: 'ID', width: 50 },
     { field: 'name', headerName: 'Name', width: 200, filterable: true },
-    { field: 'username', headerName: 'Username', width: 150, filterable: true },
-    { field: 'email', headerName: 'Email', width: 250, filterable: true },
     { field: 'phone', headerName: 'Phone', width: 150, filterable: true },
+    { field: 'email', headerName: 'Email', width: 200, filterable: true },
+    { field: 'address', headerName: 'Address', width: 250, filterable: true },
+    { field: 'pancard', headerName: 'Pancard', width: 200, filterable: true },
   ];
 
   return (
