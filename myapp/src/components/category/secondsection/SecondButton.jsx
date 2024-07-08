@@ -45,7 +45,7 @@ const FirstButton = () => {
       console.log("main category", main_category)
       setMainCategories(main_category?.data?.data)
     } catch (error) {
-      setIsError(error.message);
+      console.error("Error fetching main categories",error)
     }
   }
 
