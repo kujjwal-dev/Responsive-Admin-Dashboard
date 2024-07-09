@@ -13,13 +13,14 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import Axios from 'axios';
 import toast from "react-hot-toast";
+import { CategoryContext } from '../../../context/CategoryContext'
 
 const initialValues = {
   series: "",
@@ -39,6 +40,7 @@ const FirstButton = () => {
   const [subCategories, setSubCategories] = useState([]);
   const [filteredSubCategories, setFilteredSubCategories] = useState([]);
   const [loading, setLoading] = useState(false);
+  const {getCategories} = useContext(CategoryContext);
 
   async function get_main_category() {
     try {
@@ -100,6 +102,7 @@ const FirstButton = () => {
         console.error(error)
       } finally {
         setLoading(false);
+        getCategories();
       }
     },
   });
@@ -210,7 +213,7 @@ const FirstButton = () => {
                 disabled={loading}
               >
 
-                {loading ? "SUbmitting..."  : "Submit" }
+                {loading ? "SUbmitting..." : "Submit"}
 
               </Button>
             </Stack>

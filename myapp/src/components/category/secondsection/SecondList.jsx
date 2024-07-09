@@ -1,15 +1,21 @@
-import * as React from 'react';
+import React, { useContext } from 'react';
 import ListSubheader from '@mui/material/ListSubheader';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
+import { CategoryContext } from '../../../context/CategoryContext'
 
 export default function SecondList() {
-  const [open, setOpen] = React.useState(true);
 
-  const handleClick = () => {
-    setOpen(!open);
-  };
+  const { subCategories, selectedMainCategory, setSelectedSubCategory, setSelectedSeries } = useContext(CategoryContext);
+
+ 
+  const filteredSubCategories = subCategories.filter(sub => sub.main_category_id === selectedMainCategory);
+
+  const handleSelectSubCategory = (subCategoryId) => {
+    setSelectedSubCategory(subCategoryId);
+    setSelectedSeries(null);
+  }
 
   return (
     <List
@@ -22,15 +28,14 @@ export default function SecondList() {
         </ListSubheader>
       }
     >
-        <ListItemButton>
-        
-        <ListItemText primary="Ramayana" />
-      </ListItemButton>
+      {filteredSubCategories.map((subcategory,index) => (
+        <ListItemButton key={index} onClick={() => handleSelectSubCategory(subcategory._id) }>
+          <ListItemText>{subcategory.sub_category}</ListItemText>
+        </ListItemButton>
+      ))}
+      
+      
 
-      <ListItemButton>
-        
-        <ListItemText primary="Mahabharat" />
-      </ListItemButton>
      
     </List>
   );

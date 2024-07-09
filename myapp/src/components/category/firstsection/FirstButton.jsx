@@ -8,13 +8,14 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import Axios from 'axios';
 import toast, { Toaster } from "react-hot-toast";
+import { CategoryContext } from '../../../context/CategoryContext'
 
 const initialValues = {
   main_category: "",
@@ -29,6 +30,8 @@ const validationSchema = Yup.object({
 const FirstButton = () => {
   const [open, setOpen] = useState(false);
   const [loading,setLoading] = useState(false);
+  const {getCategories} = useContext(CategoryContext);
+
   const functionOpenPopup = () => {
     setOpen(true);
   };
@@ -57,9 +60,12 @@ const FirstButton = () => {
         console.error(error)
       } finally{
         setLoading(false)
+        getCategories();
       }
     }
   });
+
+  
 
   return (
     <div style={{ textAlign: "center" }}>

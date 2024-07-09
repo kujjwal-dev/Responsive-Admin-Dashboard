@@ -29,7 +29,8 @@ const Auth = () => {
       <Toaster position="top-right"/>
      <App /> 
     </SidebarProvider>
-  </ThemeProvider>  : 
+  </ThemeProvider> 
+  : 
   <Login setUser={setUser} />;
 };
 
