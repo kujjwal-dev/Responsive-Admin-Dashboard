@@ -70,7 +70,7 @@ const FirstButton = () => {
     onSubmit: async(values) => {
       setLoading(true);
       try {
-        const createSubCategory = await Axios.post("http://localhost:3001/api/v1/category//create_sub_category",{
+        const createSubCategory = await Axios.post("http://localhost:3001/api/v1/category/create_sub_category",{
           sub_category: values.sub_category,
           main_category_id: values.main_category_id,
         },{
@@ -80,12 +80,12 @@ const FirstButton = () => {
         console.log(createSubCategory.data);
         resetForm();
         functionClosePopup();
+        getCategories();
       } catch (error) {
         toast.error("Failed to create category")
         console.error(error)
       } finally {
         setLoading(false)
-        getCategories();
       }
     },
   });

@@ -47,6 +47,12 @@ const ModeratorTable
     { field: 'pancard', headerName: 'Pancard', width: 200, filterable: true },
   ];
 
+  const rows = [
+    { id: 1, name: 'Sandeep Patel', phone: '9876543210', email: 'sandeep@example.com', address: '123, Street Name, City', pancard: 'ABCDE1234F' },
+    { id: 2, name: 'Deepika Gupta', phone: '8765432109', email: 'deepika@example.com', address: '456, Street Name, City', pancard: 'FGHIJ5678K' },
+  ];
+  
+  
   return (
     <div className="data-table-container">
       <Stack direction="row" spacing={2} mb={2} className="search-bar">
@@ -60,7 +66,8 @@ const ModeratorTable
       </Stack>
       <div style={{ height: 600, width: '100%' }}>
         <DataGrid
-          rows={filteredData}
+          // rows={filteredData}
+          rows={rows}
           columns={columns}
           pageSize={5}
           rowsPerPageOptions={[5,10,20]}

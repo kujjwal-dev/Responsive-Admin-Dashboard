@@ -46,6 +46,14 @@ const AdminTable
     { field: 'address', headerName: 'Address', width: 250, filterable: true },
     { field: 'pancard', headerName: 'Pancard', width: 200, filterable: true },
   ];
+  
+  const rows = [
+    { id: 1, name: 'Ravi Kumar', phone: '9876543210', email: 'ravi@gmail.com', address: '123, Street Name, City', pancard: 'ABCDE1234F' },
+    { id: 2, name: 'Naman Sharma', phone: '8765432109', email: 'naman@gmail.com', address: '456, Street Name, City', pancard: 'FGHIJ5678K' },
+  ];
+  
+
+  
 
   return (
     <div className="data-table-container">
@@ -60,7 +68,8 @@ const AdminTable
       </Stack>
       <div style={{ height: 600, width: '100%' }}>
         <DataGrid
-          rows={filteredData}
+          // rows={filteredData}
+          rows={rows}
           columns={columns}
           pageSize={5}
           rowsPerPageOptions={[25,50,100]}

@@ -97,12 +97,12 @@ const FirstButton = () => {
         console.log(createSeries.data)
         resetForm();
         functionClosePopup();
+        getCategories();
       } catch (error) {
         toast.error("Error in creating series");
         console.error(error)
       } finally {
         setLoading(false);
-        getCategories();
       }
     },
   });

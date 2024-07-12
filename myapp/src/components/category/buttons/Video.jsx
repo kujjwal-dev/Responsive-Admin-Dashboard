@@ -35,7 +35,7 @@ const validationSchema = Yup.object({
   content_category: Yup.string().required("Content Category is required"),
 });
 
-const Moderator = () => {
+const Video = () => {
   const [open, setOpen] = useState(false);
   const functionOpenPopup = () => {
     setOpen(true);
@@ -152,4 +152,4 @@ const Moderator = () => {
   );
 };
 
-export default Moderator;
+export default Video;

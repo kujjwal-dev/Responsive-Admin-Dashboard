@@ -52,21 +52,27 @@ const columns = [{
 
 ];
 
+const rows = [
+  {
+    id: 1,
+    kid_email: 'example@example.com',
+    kid_phone_number: 'example',
+    child_class: 'Class 5',
+    child_board: 'CBSE',
+    child_username: 'example_123',
+    child_password: 'password123',
+  }
+];
+
+
+
     useEffect(() =>{
       
-
-
-
-
-
-
     },[])
 
 
 
 
-
-   
    const options = {
      selectableRows: false,
      elevation: 0,
@@ -94,7 +100,7 @@ const columns = [{
         },
         body:{
           padding:"7px 15px",
-          color: "#e2e8f0",
+          color: "#000000",
         }
       }
     }
@@ -111,8 +117,9 @@ const columns = [{
         
 
           <MUIDataTable
-        
-        data={users}
+         
+        // data={users}
+        data={rows}
         columns={columns}
         options={options}
       />

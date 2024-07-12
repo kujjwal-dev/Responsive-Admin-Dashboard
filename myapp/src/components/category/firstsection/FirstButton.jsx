@@ -55,12 +55,13 @@ const FirstButton = () => {
         console.log(createMainCategory.data);
         resetForm();
         functionClosePopup();
+        getCategories();
+
       } catch (error) {
         toast.error("Failed to create category")
         console.error(error)
       } finally{
         setLoading(false)
-        getCategories();
       }
     }
   });

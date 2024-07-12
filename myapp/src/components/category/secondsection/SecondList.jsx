@@ -15,7 +15,9 @@ export default function SecondList() {
   const handleSelectSubCategory = (subCategoryId) => {
     setSelectedSubCategory(subCategoryId);
     setSelectedSeries(null);
+  
   }
+
 
   return (
     <List

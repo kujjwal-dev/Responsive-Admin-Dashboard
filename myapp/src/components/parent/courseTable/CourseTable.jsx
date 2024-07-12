@@ -40,19 +40,35 @@ const columns = [{
     useEffect(() =>{
         // to get api content
       
-
-
-
-
-
-
     },[])
 
-
-
-
-
-   
+    const rows = [
+      {
+        id: 1,
+        course_name: 'Ancient India',
+        status: 'Active',
+        Quiz: 'Ancient Indian History Quiz',
+      },
+      {
+        id: 2,
+        course_name: 'Medieval India',
+        status: 'Inactive',
+        Quiz: 'Medieval Indian History Quiz',
+      },
+      {
+        id: 3,
+        course_name: 'Modern India',
+        status: 'Active',
+        Quiz: 'Modern Indian History Quiz',
+      },
+      {
+        id: 4,
+        course_name: 'Indian Independence Movement',
+        status: 'Active',
+        Quiz: 'Independence Movement Quiz',
+      },
+    ];
+    
    const options = {
      selectableRows: false,
      elevation: 0,
@@ -79,7 +95,7 @@ const columns = [{
         },
         body:{
           padding:"7px 15px",
-          color: "#e2e8f0",
+          color: "#000000",
         }
       }
     }
@@ -96,8 +112,9 @@ const columns = [{
         
 
           <MUIDataTable
-        
-        data={users}
+         title={"Course details"}
+        // data={users}
+        data={rows}
         columns={columns}
         options={options}
       />

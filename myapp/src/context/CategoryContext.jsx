@@ -90,7 +90,7 @@ const CategoryProvider = ({ children }) => {
     const updateMainCategory = async (id, updatedData) => {
         try {
             const updateMainCategory = await Axios.put(`http://localhost:3001/api/v1/category/update_main_category/${id}`, {
-                updatedData
+                main_category : updatedData
             }, {
                 withCredentials: true,
             })
@@ -119,6 +119,47 @@ const CategoryProvider = ({ children }) => {
         }
     };
 
+    // update sub category
+
+    const updateSubCategory = async (id, updatedData) => {
+        try {
+            const updateMainCategory = await Axios.put(`http://localhost:3001/api/v1/category/update_sub_category/${id}`, {
+                sub_category : updatedData
+            }, {
+                withCredentials: true,
+            })
+            // update sub category in state
+            setSubCategories(prevMainCategories => prevMainCategories.map(
+                category => category.id === id ? { ...category, ...updatedData } : category
+            ));
+
+        } catch (error) {
+            console.error('Error updating sub category', error)
+        }
+    };
+
+    // update series
+
+    const updateSeries = async (id, updatedData) => {
+        try {
+            const updateMainCategory = await Axios.put(`http://localhost:3001/api/v1/category/update_series/${id}`, {
+                series : updatedData
+            }, {
+                withCredentials: true,
+            })
+            // update series in state
+            setSeries(prevMainCategories => prevMainCategories.map(
+                category => category.id === id ? { ...category, ...updatedData } : category
+            ));
+
+        } catch (error) {
+            console.error('Error updating series', error)
+        }
+    };
+
+
+
+
 
 
     return (
@@ -126,7 +167,9 @@ const CategoryProvider = ({ children }) => {
             mainCategories, setMainCategories, subCategories, setSubCategories, series, setSeries,
             selectedMainCategory, setSelectedMainCategory, selectedSubCategory, setSelectedSubCategory, selectedSeries, setSelectedSeries,
             getMainCategoryById, getSubCategoryById, getSeriesById,
-            updateMainCategory, deleteMainCategory, getCategories
+            updateMainCategory, deleteMainCategory, getCategories,
+            updateSubCategory,
+            updateSeries
         }}>
             {children}
         </CategoryContext.Provider>
