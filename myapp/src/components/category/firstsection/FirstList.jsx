@@ -5,12 +5,14 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import { CategoryContext } from '../../../context/CategoryContext';
 import { IconButton, TextField } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import SaveIcon from '@mui/icons-material/Save';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function FirstList() {
-    const { mainCategories , setMainCategories,   setSelectedMainCategory , setSelectedSubCategory, setSelectedSeries , updateMainCategory , deleteMainCategory } = useContext(CategoryContext);
-    const [isEditing,setIsEditing] = useState(null);
-    const [updatedName,setUpdatedName] = useState('');
+    const { mainCategories, setMainCategories, setSelectedMainCategory, setSelectedSubCategory, setSelectedSeries, updateMainCategory, deleteMainCategory } = useContext(CategoryContext);
+    const [isEditing, setIsEditing] = useState(null);
+    const [updatedName, setUpdatedName] = useState('');
 
     const handleSelectMainCategory = (mainCategoryId) => {
         setSelectedMainCategory(mainCategoryId);
@@ -19,43 +21,41 @@ export default function FirstList() {
     }
 
     const handleEdit = (category) => {
-        setIsEditing(category.id)
-        setUpdatedName(category.main_category)
+        setIsEditing(category.id);
+        setUpdatedName(category.main_category);
     }
 
-    const handleUpdate = async(categoryId) => {
-        
-        //update ui with updated value
+    const handleUpdate = async (categoryId) => {
+        // Update UI with updated value
         const updatedCategories = mainCategories.map(category =>
             category.id === categoryId ? { ...category, main_category: updatedName } : category
         );
-        setMainCategories(updatedCategories); 
+        setMainCategories(updatedCategories);
 
-        //update the main category
+        // Update the main category
         try {
-            await updateMainCategory(categoryId,updatedName);
-            console.log(updatedName)
-            setIsEditing(null)
+            await updateMainCategory(categoryId, updatedName);
+            console.log(updatedName);
+            setIsEditing(null);
         } catch (error) {
-            console.error("Error updating main category",error)
+            console.error("Error updating main category", error);
         }
     }
-
-
 
     const handleDelete = async (categoryId, e) => {
         e.stopPropagation();
         const updatedCategories = mainCategories.filter(category => category.id !== categoryId);
-        setMainCategories(updatedCategories); 
+        setMainCategories(updatedCategories);
 
         try {
             await deleteMainCategory(categoryId);
-            console.log(categoryId)
+            console.log(categoryId);
         } catch (err) {
             console.error('Delete failed:', err);
             setMainCategories(mainCategories);
         }
     };
+
     return (
         <>
             <List
@@ -70,25 +70,29 @@ export default function FirstList() {
             >
                 {mainCategories.map((category, index) => (
                     <ListItemButton key={index} onClick={() => handleSelectMainCategory(category.id)}>
-
-                        { isEditing === category.id ? (
+                        {isEditing === category.id ? (
                             <TextField
-                            value={updatedName}
-                            onChange={(e) => setUpdatedName(e.target.value)}
-                            onBlur={() => handleUpdate(category.id)}
-                            autoFocus
-                            size='small'
-                            sx={{flex:1}}
+                                value={updatedName}
+                                onChange={(e) => setUpdatedName(e.target.value)}
+                                size="small"
+                                sx={{ flex: 1 }}
                             />
-                        )   :   (
-                            <ListItemText onClick={(e) => {
-                                e.stopPropagation()
-                                handleEdit(category)}} sx={{flex:1}}>{category.main_category}</ListItemText>
-                        ) }
-                        <IconButton size='small' onClick={(e) => handleDelete(category.id,e)}>
-                        <DeleteIcon fontSize="small" />
+                        ) : (
+                            <ListItemText sx={{ flex: 1 }}>{category.main_category}</ListItemText>
+                        )}
+
+                        <IconButton size="small" onClick={(e) => {
+                            e.stopPropagation();
+                            isEditing === category.id ? handleUpdate(category.id) : handleEdit(category);
+                        }} sx={{ color: '#475be8' }} >
+                            {isEditing === category.id ? <SaveIcon fontSize="small" /> : <EditIcon fontSize="small" />}
                         </IconButton>
 
+                        <IconButton size="small" onClick={(e) => handleDelete(category.id, e)}
+                            sx={{ color: '#475be8' }}
+                        >
+                            <DeleteIcon fontSize="small" />
+                        </IconButton>
                     </ListItemButton>
                 ))}
             </List>

@@ -1,13 +1,19 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import ListSubheader from '@mui/material/ListSubheader';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import { CategoryContext } from '../../../context/CategoryContext'
+import { IconButton, TextField } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import SaveIcon from '@mui/icons-material/Save';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function SecondList() {
 
-  const { subCategories, selectedMainCategory, setSelectedSubCategory, setSelectedSeries } = useContext(CategoryContext);
+  const { subCategories, setSubCategories,  selectedMainCategory, setSelectedSubCategory, setSelectedSeries, updateSubCategory } = useContext(CategoryContext);
+  const [isEditing, setIsEditing] = useState(null);
+  const [updatedName, setUpdatedName] = useState('');
 
  
   const filteredSubCategories = subCategories.filter(sub => sub.main_category_id === selectedMainCategory);
@@ -15,8 +21,36 @@ export default function SecondList() {
   const handleSelectSubCategory = (subCategoryId) => {
     setSelectedSubCategory(subCategoryId);
     setSelectedSeries(null);
-  
   }
+
+  const handleEdit = (subcategory) => {
+    setIsEditing(subcategory._id);
+    setUpdatedName(subcategory.sub_category);
+}
+
+const handleUpdate = async (subcategoryId) => {
+  // Update UI with updated value
+  const updatedCategories = subCategories.map(subcategory =>
+      subcategory._id === subcategoryId ? { ...subcategory, sub_category: updatedName } : subcategory
+  );
+  setSubCategories(updatedCategories);
+
+  // Update the main category
+  try {
+      await updateSubCategory(subcategoryId, updatedName);
+      console.log(updatedName);
+      setIsEditing(null);
+  } catch (error) {
+      console.error("Error updating main category", error);
+  }
+}
+
+const handleDelete = async(subCategoryId,e) => {
+  e.stopPropagation();
+  
+}
+
+
 
 
   return (
@@ -32,7 +66,28 @@ export default function SecondList() {
     >
       {filteredSubCategories.map((subcategory,index) => (
         <ListItemButton key={index} onClick={() => handleSelectSubCategory(subcategory._id) }>
-          <ListItemText>{subcategory.sub_category}</ListItemText>
+          {isEditing === subcategory._id ? (
+            <TextField
+            value={updatedName}
+            onChange={(e) => setUpdatedName(e.target.value)}
+            size='small'
+            sx={{flex:1}}
+             />
+          ) : (
+            <ListItemText sx={{flex:1}}>{subcategory.sub_category}</ListItemText>
+          )}
+
+          <IconButton size='small' onClick={(e) => {
+            e.stopPropagation();
+            isEditing === subcategory._id ? handleUpdate(subcategory._id) : handleEdit(subcategory)
+          }} sx={{ color: '#475be8' }} >
+            {isEditing === subcategory._id ? <SaveIcon fontSize='small'/> : <EditIcon fontSize='small'/> }
+          </IconButton>
+
+          <IconButton size='small' onClick={(e) => handleDelete(subcategory._id,e)} sx={{ color: '#475be8' }} >
+            <DeleteIcon fontSize='small'/>
+          </IconButton>
+
         </ListItemButton>
       ))}
       
