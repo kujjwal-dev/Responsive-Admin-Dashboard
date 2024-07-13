@@ -8,13 +8,14 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import Axios from "axios";
 import toast from "react-hot-toast";
+import { ProfileContext } from '../../../context/ProfileContext'
 
 const initialValues = {
   Name: "",
@@ -37,6 +38,7 @@ const validationSchema = Yup.object({
 });
 
 const Moderator = () => {
+  const { getAllAdmins } = useContext(ProfileContext);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const functionOpenPopup = () => {
@@ -73,6 +75,13 @@ const Moderator = () => {
       }
     },
   });
+
+  useEffect(() => {
+    if (!loading) {
+      getAllAdmins();
+    }
+  }, [loading, getAllAdmins]);
+
 
   return (
     <div style={{ textAlign: "center" }}>

@@ -1,26 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import './ModeratorTable.scss';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import axios from 'axios';
 import { TextField, Stack } from '@mui/material';
+import { ProfileContext } from '../../../context/ProfileContext';
 
-const ModeratorTable
- = () => {
-  const [data, setData] = useState([]);
+const ModeratorTable = () => {
+  const { moderators } = useContext(ProfileContext);
   const [searchText, setSearchText] = useState('');
   const [filteredData, setFilteredData] = useState([]);
 
-  // useEffect(() => {
-  //   // Fetch data from a dummy API
-  //   axios.get('https://jsonplaceholder.typicode.com/users')
-  //     .then(response => {
-  //       setData(response.data);
-  //       setFilteredData(response.data);
-  //     })
-  //     .catch(error => {
-  //       console.error('Error fetching data: ', error);
-  //     });
-  // }, []);
+  useEffect(() => {
+    setFilteredData(moderators); 
+  }, [moderators]);
 
   const handleSearch = (event) => {
     const value = event.target.value.toLowerCase();
@@ -29,17 +20,17 @@ const ModeratorTable
   };
 
   const filterRows = (value) => {
-    const filteredRows = data.filter(item => 
+    const filteredRows = moderators.filter(item =>
       item.name.toLowerCase().includes(value) ||
       item.email.toLowerCase().includes(value) ||
-      item.username.toLowerCase().includes(value) ||
+      item.username?.toLowerCase().includes(value) ||
       item.phone.includes(value)
     );
     setFilteredData(filteredRows);
   };
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 50 },
+    { field: 'id', headerName: 'ID', width: 50 }, 
     { field: 'name', headerName: 'Name', width: 200, filterable: true },
     { field: 'phone', headerName: 'Phone', width: 150, filterable: true },
     { field: 'email', headerName: 'Email', width: 200, filterable: true },
@@ -47,12 +38,6 @@ const ModeratorTable
     { field: 'pancard', headerName: 'Pancard', width: 200, filterable: true },
   ];
 
-  const rows = [
-    { id: 1, name: 'Sandeep Patel', phone: '9876543210', email: 'sandeep@example.com', address: '123, Street Name, City', pancard: 'ABCDE1234F' },
-    { id: 2, name: 'Deepika Gupta', phone: '8765432109', email: 'deepika@example.com', address: '456, Street Name, City', pancard: 'FGHIJ5678K' },
-  ];
-  
-  
   return (
     <div className="data-table-container">
       <Stack direction="row" spacing={2} mb={2} className="search-bar">
@@ -66,11 +51,10 @@ const ModeratorTable
       </Stack>
       <div style={{ height: 600, width: '100%' }}>
         <DataGrid
-          // rows={filteredData}
-          rows={rows}
+          rows={filteredData}
           columns={columns}
           pageSize={5}
-          rowsPerPageOptions={[5,10,20]}
+          rowsPerPageOptions={[5, 10, 20]}
           components={{ Toolbar: GridToolbar }}
           disableSelectionOnClick
           disableColumnMenu
@@ -81,4 +65,3 @@ const ModeratorTable
 };
 
 export default ModeratorTable;
-;

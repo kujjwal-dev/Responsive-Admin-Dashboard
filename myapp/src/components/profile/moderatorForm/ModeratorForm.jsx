@@ -8,12 +8,13 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import Axios from "axios";
 import toast from "react-hot-toast";
+import { ProfileContext } from '../../../context/ProfileContext'
 
 const initialValues = {
   Name: "",
@@ -38,6 +39,7 @@ const validationSchema = Yup.object({
 });
 
 const ModeratorForm = () => {
+  const { getAllModerators } = useContext(ProfileContext);
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = useState(false);
   const functionOpenPopup = () => {
@@ -47,7 +49,7 @@ const ModeratorForm = () => {
     setOpen(false);
   };
 
-  const { values, handleChange, handleSubmit, errors, touched , resetForm } = useFormik({
+  const { values, handleChange, handleSubmit, errors, touched, resetForm } = useFormik({
     initialValues: initialValues,
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -74,6 +76,13 @@ const ModeratorForm = () => {
       }
     },
   });
+
+  useEffect(() => {
+    if (!loading) {
+      getAllModerators();
+    }
+  }, [loading, getAllModerators]);
+
 
   return (
     <div style={{ textAlign: "center" }}>
@@ -156,7 +165,7 @@ const ModeratorForm = () => {
               />
 
               <Button type="submit" color="primary" variant="contained" sx={{ backgroundColor: "#475be8", '&:hover': { backgroundColor: "#3a4db7" } }} disabled={loading}>
-                {loading ? "Submitting...."  : "Submit" }
+                {loading ? "Submitting...." : "Submit"}
               </Button>
 
             </Stack>
