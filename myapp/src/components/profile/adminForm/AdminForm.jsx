@@ -80,7 +80,7 @@ const Moderator = () => {
     if (!loading) {
       getAllAdmins();
     }
-  }, [loading, getAllAdmins]);
+  }, [loading, ]);
 
 
   return (
