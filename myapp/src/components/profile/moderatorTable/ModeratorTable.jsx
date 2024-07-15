@@ -11,7 +11,7 @@ const ModeratorTable = () => {
 
   useEffect(() => {
     setFilteredData(moderators); 
-  }, [moderators]);
+  }, []);
 
   const handleSearch = (event) => {
     const value = event.target.value.toLowerCase();

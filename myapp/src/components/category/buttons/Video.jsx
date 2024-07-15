@@ -1,3 +1,4 @@
+import React, { useContext, useState } from "react";
 import {
   Button,
   Dialog,
@@ -8,19 +9,27 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import React from "react";
 import CloseIcon from "@mui/icons-material/Close";
-import { useState } from "react";
-import * as Yup from "yup";
 import { useFormik } from "formik";
-import FileUpload from "./FileUpload";
+import * as Yup from "yup";
+import { CategoryContext } from '../../../context/CategoryContext';
+import Axios from 'axios';
+import toast from "react-hot-toast";
 
 const initialValues = {
   title: "",
   description: "",
   video_url: "",
   video_thumbnail: "",
+  content_source_type: "",
   content_category: "",
+  class_grade: "",
+  content_video_id: [
+    { "1080p": "" },
+    { "720p": "" },
+    { "480p": "" },
+    { "360p": "" },
+  ],
 };
 
 const validationSchema = Yup.object({
@@ -32,39 +41,72 @@ const validationSchema = Yup.object({
   video_thumbnail: Yup.string()
     .url("Invalid URL")
     .required("Video Thumbnail is required"),
+    content_source_type: Yup.string().required("Content Source Type is required"),
   content_category: Yup.string().required("Content Category is required"),
+  class_grade: Yup.string().required("Class Grade is required"),
 });
 
 const Video = () => {
+  const { selectedSeries } = useContext(CategoryContext);
   const [open, setOpen] = useState(false);
-  const functionOpenPopup = () => {
-    setOpen(true);
-  };
-  const functionClosePopup = () => {
-    setOpen(false);
-  };
+  const [loading, setLoading] = useState(false);
 
-  const { values, handleChange, handleSubmit, errors, touched } = useFormik({
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  
+  const { values, handleChange, handleSubmit, errors, touched , resetForm } = useFormik({
     initialValues: initialValues,
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: async (values) => {
+      // populate content_video_id with video_url for each quality level
+      const updatedVideoIds = initialValues.content_video_id.map((item) => {
+        const quality = Object.keys(item)[0];
+        return { [quality]: values.video_url };
+      });
+      setLoading(true);
+      try {
+        const createVideoContent = await Axios.post('http://localhost:3001/api/v1/video_content/video_content_create', {
+          title : values.title,
+          description : values.description,
+          video_url : values.video_url,
+          video_thumbnail : values.video_thumbnail,
+          content_source_type : values.content_source_type,
+          class_grade : values.class_grade,
+          content_category : values.content_category,
+          content_type : "video",
+          content_video_id: values.content_video_id,
+          main_category_id :  selectedSeries.main_category_id ,
+          sub_category_id:   selectedSeries.sub_category_id  ,
+          series_id: selectedSeries._id  ,
+        }, {
+          withCredentials: true,
+        });
+        
+        toast.success("Video Content Created");
+        console.log(createVideoContent.data);
+        resetForm();
+        handleClose();
+      } catch (error) {
+         console.error("Failed to create video content")
+      } finally {
+        setLoading(false);
+      }
     },
   });
 
   return (
     <div style={{ textAlign: "center" }}>
       <Button
-        onClick={functionOpenPopup}
+        onClick={handleOpen}
         variant="contained"
-        sx={{ backgroundColor: "#475be8", '&:hover': { backgroundColor: "#3a4db7" } }}
+        sx={{ backgroundColor: "#475be8", "&:hover": { backgroundColor: "#3a4db7" } }}
       >
         Add Video
       </Button>
-      <Dialog open={open} onClose={functionClosePopup} fullWidth maxWidth="sm">
+      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
         <DialogTitle>
           Video Upload
-          <IconButton onClick={functionClosePopup} style={{ float: "right" }}>
+          <IconButton onClick={handleClose} style={{ float: "right" }}>
             <CloseIcon color="primary" />
           </IconButton>
         </DialogTitle>
@@ -100,7 +142,7 @@ const Video = () => {
               <TextField
                 label="Video URL"
                 className="rounded-md"
-                placeholder="Enter Video URL"
+                placeholder="Enter YouTube Video URL"
                 variant="outlined"
                 name="video_url"
                 fullWidth
@@ -122,6 +164,18 @@ const Video = () => {
                 helperText={touched.video_thumbnail && errors.video_thumbnail}
               />
               <TextField
+                label="Content Source Type"
+                className="rounded-md"
+                placeholder="Enter Content Source Type"
+                variant="outlined"
+                name="content_source_type"
+                fullWidth
+                value={values.content_source_type}
+                onChange={handleChange}
+                error={touched.content_source_type && Boolean(errors.content_source_type)}
+                helperText={touched.content_source_type && errors.content_source_type}
+              />
+              <TextField
                 label="Content Category"
                 className="rounded-md"
                 placeholder="Enter Content Category"
@@ -133,19 +187,31 @@ const Video = () => {
                 error={touched.content_category && Boolean(errors.content_category)}
                 helperText={touched.content_category && errors.content_category}
               />
-              <FileUpload/>
+              <TextField
+                label="Class Grade"
+                className="rounded-md"
+                placeholder="Enter Class Grade"
+                variant="outlined"
+                name="class_grade"
+                fullWidth
+                value={values.class_grade}
+                onChange={handleChange}
+                error={touched.class_grade && Boolean(errors.class_grade)}
+                helperText={touched.class_grade && errors.class_grade}
+              />
               <Button
                 type="submit"
                 variant="contained"
-                sx={{ backgroundColor: "#475be8", '&:hover': { backgroundColor: "#3a4db7" } }}
+                sx={{ backgroundColor: "#475be8", "&:hover": { backgroundColor: "#3a4db7" } }}
+                disabled={loading}
               >
-                Submit
+                { loading ? "Submitting..." : "Submit" }
               </Button>
             </Stack>
           </form>
         </DialogContent>
         <DialogActions>
-          {/* <Button onClick={functionClosePopup} color="error" variant="contained">Close</Button> */}
+          {/* Additional actions can be added here */}
         </DialogActions>
       </Dialog>
     </div>

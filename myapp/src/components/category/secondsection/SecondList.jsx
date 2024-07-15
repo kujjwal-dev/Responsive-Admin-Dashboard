@@ -11,7 +11,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function SecondList() {
 
-  const { subCategories, setSubCategories,  selectedMainCategory, setSelectedSubCategory, setSelectedSeries, updateSubCategory } = useContext(CategoryContext);
+  const { subCategories, setSubCategories,  selectedMainCategory, setSelectedSubCategory, setSelectedSeries, updateSubCategory , deleteSubCategory } = useContext(CategoryContext);
   const [isEditing, setIsEditing] = useState(null);
   const [updatedName, setUpdatedName] = useState('');
 
@@ -45,8 +45,19 @@ const handleUpdate = async (subcategoryId) => {
   }
 }
 
-const handleDelete = async(subCategoryId,e) => {
+const handleDelete = async(mainCategoryId,subCategoryId,e) => {
   e.stopPropagation();
+  console.log(mainCategoryId);
+  console.log(subCategoryId);
+  const updatedCategories = subCategories.filter(category => category.id !== subCategoryId);
+  setSubCategories(updatedCategories);
+
+  try {
+    await deleteSubCategory(mainCategoryId,subCategoryId);
+  } catch (error) {
+    console.error('Delete failed',err);
+    setSubCategories(subCategories)
+  }
   
 }
 
@@ -84,7 +95,7 @@ const handleDelete = async(subCategoryId,e) => {
             {isEditing === subcategory._id ? <SaveIcon fontSize='small'/> : <EditIcon fontSize='small'/> }
           </IconButton>
 
-          <IconButton size='small' onClick={(e) => handleDelete(subcategory._id,e)} sx={{ color: '#475be8' }} >
+          <IconButton size='small' onClick={(e) => handleDelete(subcategory.main_category_id,subcategory._id,e)} sx={{ color: '#475be8' }} >
             <DeleteIcon fontSize='small'/>
           </IconButton>
 

@@ -80,6 +80,7 @@ const CategoryProvider = ({ children }) => {
                 withCredentials: true,
             });
             setSelectedSeries(response?.data?.data)
+            console.log(response?.data?.data);
         } catch (error) {
             console.error("Error fetching series", error);
         }
@@ -138,6 +139,24 @@ const CategoryProvider = ({ children }) => {
         }
     };
 
+
+    // delete sub category 
+
+     const deleteSubCategory = async (idMain,idSub) => {
+        console.log(idMain);
+        console.log(idSub);
+        try {
+            await Axios.delete(`http://localhost:3001/api/v1/category/delete_sub_category/${idMain}/${idSub}`, {
+                withCredentials: true,
+            });
+            // delete sub category in state
+            setSubCategories(prevSubCategories => prevSubCategories.filter(
+                category => category.id !== id));
+        } catch (error) {
+            console.error('Error deleting sub category', error)
+        }
+    };
+
     // update series
 
     const updateSeries = async (id, updatedData) => {
@@ -157,10 +176,20 @@ const CategoryProvider = ({ children }) => {
         }
     };
 
+    // delete series
 
-
-
-
+     const deleteSeries = async (id) => {
+        try {
+            await Axios.delete(`http://localhost:3001/api/v1/category/delete_series/${id}`, {
+                withCredentials: true,
+            });
+            // delete series in state
+            setMainCategories(prevSeries => prevSeries.filter(
+                category => category.id !== id));
+        } catch (error) {
+            console.error('Error deleting series', error)
+        }
+    };
 
     return (
         <CategoryContext.Provider value={{
@@ -168,8 +197,8 @@ const CategoryProvider = ({ children }) => {
             selectedMainCategory, setSelectedMainCategory, selectedSubCategory, setSelectedSubCategory, selectedSeries, setSelectedSeries,
             getMainCategoryById, getSubCategoryById, getSeriesById,
             updateMainCategory, deleteMainCategory, getCategories,
-            updateSubCategory,
-            updateSeries
+            updateSubCategory, deleteSubCategory,
+            updateSeries , deleteSeries
         }}>
             {children}
         </CategoryContext.Provider>

@@ -12,13 +12,23 @@ import { IconButton, TextField } from '@mui/material';
 
 export default function ThirdList() {
 
-  const { series, setSeries, selectedMainCategory, selectedSubCategory, updateSeries } = useContext(CategoryContext);
+  const { series, setSeries, selectedMainCategory, selectedSubCategory, updateSeries, deleteSeries, getSeriesById, setSelectedSeries } = useContext(CategoryContext);
   const [isEditing, setIsEditing] = useState(null);
   const [updatedName, setUpdatedName] = useState('');
 
   const filteredSeries = series.filter(ser =>
     ser.main_category_id === selectedMainCategory && ser.sub_category_id === selectedSubCategory
   );
+
+  const handleSeriesSelect = async(seriesId) => {
+    console.log(seriesId);
+    try {
+      await getSeriesById(seriesId);
+    } catch (error) {
+      console.error('Error getting series details',error)
+    }
+
+  }
 
   const handleEdit = (series) => {
     setIsEditing(series._id);
@@ -44,13 +54,18 @@ export default function ThirdList() {
 
   const handleDelete = async (seriesId, e) => {
     e.stopPropagation();
+    console.log(seriesId);
+    const updatedSeries = series.filter(series => series.id !== seriesId);
+    setSeries(updatedSeries);
+
+    try {
+      await deleteSeries(seriesId)
+    } catch (error) {
+      console.error('Delete Failed',error)
+      setSeries(series)
+    }
 
   }
-
-
-
-
-
 
   return (
     <List
@@ -66,7 +81,7 @@ export default function ThirdList() {
 
 
       {filteredSeries.map((series, index) => (
-        <ListItemButton key={index}>
+        <ListItemButton key={index}   onClick={() => handleSeriesSelect(series._id)} >
           {isEditing === series._id ? (
             <TextField
               value={updatedName}
