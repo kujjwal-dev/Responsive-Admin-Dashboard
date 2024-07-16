@@ -30,7 +30,7 @@ const validationSchema = Yup.object({
 const FirstButton = () => {
   const [open, setOpen] = useState(false);
   const [loading,setLoading] = useState(false);
-  const {getCategories} = useContext(CategoryContext);
+  const {getCategories,addMainCategory} = useContext(CategoryContext);
 
   const functionOpenPopup = () => {
     setOpen(true);
@@ -53,6 +53,7 @@ const FirstButton = () => {
         });
         toast.success("Main category created successfully");
         console.log(createMainCategory.data);
+        addMainCategory(createMainCategory.data)
         resetForm();
         functionClosePopup();
         getCategories();

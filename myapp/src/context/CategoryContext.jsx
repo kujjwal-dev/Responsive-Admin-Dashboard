@@ -59,6 +59,13 @@ const CategoryProvider = ({ children }) => {
         }
     };
 
+    // add main category 
+
+    const addMainCategory = (newCategory) => {
+        setMainCategories(prevMainCategories => [...prevMainCategories, newCategory]);
+    };
+
+
     // get sub category by id
 
     const getSubCategoryById = async (id) => {
@@ -151,7 +158,7 @@ const CategoryProvider = ({ children }) => {
             });
             // delete sub category in state
             setSubCategories(prevSubCategories => prevSubCategories.filter(
-                category => category.id !== id));
+                category => category.idSub !== idSub));
         } catch (error) {
             console.error('Error deleting sub category', error)
         }
@@ -198,7 +205,8 @@ const CategoryProvider = ({ children }) => {
             getMainCategoryById, getSubCategoryById, getSeriesById,
             updateMainCategory, deleteMainCategory, getCategories,
             updateSubCategory, deleteSubCategory,
-            updateSeries , deleteSeries
+            updateSeries , deleteSeries,
+            addMainCategory
         }}>
             {children}
         </CategoryContext.Provider>

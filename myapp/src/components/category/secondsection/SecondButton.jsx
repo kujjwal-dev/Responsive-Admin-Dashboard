@@ -33,29 +33,17 @@ const validationSchema = Yup.object({
   main_category_id: Yup.string().required('Main Category is required')
 });
 
-const FirstButton = () => {
+const SecondButton = () => {
   const [open, setOpen] = useState(false);
-  const [mainCategories, setMainCategories] = useState([]);
+  
   const [loading,setLoading] = useState(false);
-  const {getCategories} = useContext(CategoryContext);
-
-  async function get_main_category() {
-    try {
-      const main_category = await Axios.get('http://localhost:3001/api/v1/category/get_main_category', {
-        withCredentials: true,
-      });
-      console.log("main category", main_category)
-      setMainCategories(main_category?.data?.data)
-    } catch (error) {
-      console.error("Error fetching main categories",error)
-    }
-  }
+  const { mainCategories , getCategories} = useContext(CategoryContext);
 
   useEffect(() => {
-    get_main_category();
-  }, []);
+getCategories();
+  },[])
 
-
+ 
   const functionOpenPopup = () => {
     setOpen(true);
   };
@@ -172,7 +160,7 @@ const FirstButton = () => {
   );
 };
 
-export default FirstButton;
+export default SecondButton;
 
 
 

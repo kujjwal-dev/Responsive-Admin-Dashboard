@@ -34,42 +34,15 @@ const validationSchema = Yup.object({
   sub_category_id: Yup.string().required("Sub Category is required"),
 });
 
-const FirstButton = () => {
+const ThirdButton = () => {
   const [open, setOpen] = useState(false);
-  const [mainCategories, setMainCategories] = useState([]);
-  const [subCategories, setSubCategories] = useState([]);
   const [filteredSubCategories, setFilteredSubCategories] = useState([]);
   const [loading, setLoading] = useState(false);
-  const {getCategories} = useContext(CategoryContext);
-
-  async function get_main_category() {
-    try {
-      const main_category = await Axios.get('http://localhost:3001/api/v1/category/get_main_category', {
-        withCredentials: true,
-      });
-      console.log("main category", main_category)
-      setMainCategories(main_category?.data?.data)
-    } catch (error) {
-      console.error("Error fetching main categories", error)
-    }
-  }
-
-  async function get_sub_category() {
-    try {
-      const sub_category = await Axios.get('http://localhost:3001/api/v1/category/get_sub_category', {
-        withCredentials: true,
-      })
-      console.log("sub category", sub_category)
-      setSubCategories(sub_category?.data?.data)
-    } catch (error) {
-      console.error("Error fetching sub categories", error)
-    }
-  }
+  const {getCategories, mainCategories, subCategories} = useContext(CategoryContext);
 
   //fetching main and sub categories
   useEffect(() => {
-    get_main_category();
-    get_sub_category();
+    getCategories();
   }, []);
 
 
@@ -227,4 +200,4 @@ const FirstButton = () => {
   );
 };
 
-export default FirstButton;
+export default ThirdButton;
