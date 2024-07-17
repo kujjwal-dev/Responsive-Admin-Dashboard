@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import Audio from './Audio'
 import Video from './Video'
+import DisplayContent from './displaycontent/DisplayContent';
 import { CategoryContext } from '../../../context/CategoryContext';
 
 const Buttons = () => {
@@ -18,6 +19,8 @@ const Buttons = () => {
           <Audio />
           <br />
           <Video />
+          <br/>
+          <DisplayContent/>
         </div>
       )}
 

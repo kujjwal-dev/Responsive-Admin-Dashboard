@@ -11,6 +11,7 @@ const CategoryProvider = ({ children }) => {
     const [selectedMainCategory, setSelectedMainCategory] = useState(null);
     const [selectedSubCategory, setSelectedSubCategory] = useState(null);
     const [selectedSeries, setSelectedSeries] = useState(null);
+    const [videos, setVideos] = useState([]);
 
     const getCategories = async () => {
         try {
@@ -20,7 +21,7 @@ const CategoryProvider = ({ children }) => {
             });
             console.log("main category", getMainCategories)
             setMainCategories(getMainCategories?.data?.data)
-            
+
 
             //get sub categories
             const getSubCategories = await Axios.get('http://localhost:3001/api/v1/category/get_sub_category', {
@@ -53,7 +54,7 @@ const CategoryProvider = ({ children }) => {
                 withCredentials: true,
             });
             setSelectedMainCategory(response?.data?.data)
-            console.log("dtaaaaaaaaaa",response?.data?.data)
+            console.log("dtaaaaaaaaaa", response?.data?.data)
         } catch (error) {
             console.error("Error fetching main category", error);
         }
@@ -98,7 +99,7 @@ const CategoryProvider = ({ children }) => {
     const updateMainCategory = async (id, updatedData) => {
         try {
             const updateMainCategory = await Axios.put(`http://localhost:3001/api/v1/category/update_main_category/${id}`, {
-                main_category : updatedData
+                main_category: updatedData
             }, {
                 withCredentials: true,
             })
@@ -132,7 +133,7 @@ const CategoryProvider = ({ children }) => {
     const updateSubCategory = async (id, updatedData) => {
         try {
             const updateMainCategory = await Axios.put(`http://localhost:3001/api/v1/category/update_sub_category/${id}`, {
-                sub_category : updatedData
+                sub_category: updatedData
             }, {
                 withCredentials: true,
             })
@@ -149,7 +150,7 @@ const CategoryProvider = ({ children }) => {
 
     // delete sub category 
 
-     const deleteSubCategory = async (idMain,idSub) => {
+    const deleteSubCategory = async (idMain, idSub) => {
         console.log(idMain);
         console.log(idSub);
         try {
@@ -169,7 +170,7 @@ const CategoryProvider = ({ children }) => {
     const updateSeries = async (id, updatedData) => {
         try {
             const updateMainCategory = await Axios.put(`http://localhost:3001/api/v1/category/update_series/${id}`, {
-                series : updatedData
+                series: updatedData
             }, {
                 withCredentials: true,
             })
@@ -185,7 +186,7 @@ const CategoryProvider = ({ children }) => {
 
     // delete series
 
-     const deleteSeries = async (id) => {
+    const deleteSeries = async (id) => {
         try {
             await Axios.delete(`http://localhost:3001/api/v1/category/delete_series/${id}`, {
                 withCredentials: true,
@@ -198,6 +199,34 @@ const CategoryProvider = ({ children }) => {
         }
     };
 
+    // get video content 
+
+
+    const getVideoContent = async () => {
+        try {
+            const response = await Axios.get('http://localhost:3001/api/v1/video_content/get_video_content', {
+                withCredentials: true,
+            });
+            console.log(response?.data?.data)
+            setVideos(response?.data?.data)
+        } catch (error) {
+            console.error("Error fetching video content", error)
+        }
+    }
+
+    useEffect(() => {
+        if (selectedSeries) {
+            getVideoContent();
+        }
+    }, [])
+
+    // filter video content by matching series id
+
+    const getFilteredVideos = () => {
+        if (!selectedSeries) return [];
+        return videos.filter(video => video.series_id === selectedSeries._id)
+    };
+
     return (
         <CategoryContext.Provider value={{
             mainCategories, setMainCategories, subCategories, setSubCategories, series, setSeries,
@@ -205,8 +234,9 @@ const CategoryProvider = ({ children }) => {
             getMainCategoryById, getSubCategoryById, getSeriesById,
             updateMainCategory, deleteMainCategory, getCategories,
             updateSubCategory, deleteSubCategory,
-            updateSeries , deleteSeries,
-            addMainCategory
+            updateSeries, deleteSeries,
+            addMainCategory,
+            getVideoContent, getFilteredVideos, videos
         }}>
             {children}
         </CategoryContext.Provider>
