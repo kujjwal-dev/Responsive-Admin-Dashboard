@@ -199,7 +199,7 @@ const CategoryProvider = ({ children }) => {
         }
     };
 
-    // get video content 
+    // get video/audio content 
 
 
     const getVideoContent = async () => {
@@ -220,11 +220,28 @@ const CategoryProvider = ({ children }) => {
         }
     }, [])
 
-    // filter video content by matching series id
+    // Function to update video/audio content
+    const updateVideoContent = async (id, updatedData) => {
+        try {
+            const response = await Axios.put(`http://localhost:3001/api/v1/video_content/update_video_content/${id}`, updatedData, {
+                withCredentials: true,
+            });
+            setVideos(prevVideos => prevVideos.map(video => video._id === id ? { ...video, ...updatedData } : video));
+        } catch (error) {
+            console.error('Error updating video content', error);
+        }
+    };
 
-    const getFilteredVideos = () => {
-        if (!selectedSeries) return [];
-        return videos.filter(video => video.series_id === selectedSeries._id)
+    // Function to delete video/audio content
+    const deleteVideoContent = async (id) => {
+        try {
+            await Axios.delete(`http://localhost:3001/api/v1/video_content/delete_video_content/${id}`, {
+                withCredentials: true,
+            });
+            setVideos(prevVideos => prevVideos.filter(video => video._id !== id));
+        } catch (error) {
+            console.error('Error deleting video content', error);
+        }
     };
 
     return (
@@ -236,7 +253,8 @@ const CategoryProvider = ({ children }) => {
             updateSubCategory, deleteSubCategory,
             updateSeries, deleteSeries,
             addMainCategory,
-            getVideoContent, getFilteredVideos, videos
+            getVideoContent, videos,
+            updateVideoContent,deleteVideoContent
         }}>
             {children}
         </CategoryContext.Provider>

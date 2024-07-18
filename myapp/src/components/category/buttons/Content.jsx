@@ -6,6 +6,8 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
+  MenuItem,
+  Select,
   Stack,
   TextField,
 } from "@mui/material";
@@ -24,6 +26,7 @@ const initialValues = {
   content_source_type: "",
   content_category: "",
   class_grade: "",
+  content_type: "",
   content_video_id: [
     { "1080p": "" },
     { "720p": "" },
@@ -39,22 +42,21 @@ const validationSchema = Yup.object({
     .url("Invalid URL")
     .required("Video URL is required"),
   video_thumbnail: Yup.string()
-    .url("Invalid URL")
     .required("Video Thumbnail is required"),
-    content_source_type: Yup.string().required("Content Source Type is required"),
+  content_source_type: Yup.string().required("Content Source Type is required"),
   content_category: Yup.string().required("Content Category is required"),
   class_grade: Yup.string().required("Class Grade is required"),
 });
 
-const Video = () => {
+const Content = () => {
   const { selectedSeries } = useContext(CategoryContext);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  
-  const { values, handleChange, handleSubmit, errors, touched , resetForm } = useFormik({
+
+  const { values, handleChange, handleSubmit, errors, touched, resetForm } = useFormik({
     initialValues: initialValues,
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -66,28 +68,28 @@ const Video = () => {
       setLoading(true);
       try {
         const createVideoContent = await Axios.post('http://localhost:3001/api/v1/video_content/video_content_create', {
-          title : values.title,
-          description : values.description,
-          video_url : values.video_url,
-          video_thumbnail : values.video_thumbnail,
-          content_source_type : values.content_source_type,
-          class_grade : values.class_grade,
-          content_category : values.content_category,
-          content_type : "video",
+          title: values.title,
+          description: values.description,
+          video_url: values.video_url,
+          video_thumbnail: values.video_thumbnail,
+          content_source_type: values.content_source_type,
+          class_grade: values.class_grade,
+          content_category: values.content_category,
+          content_type: values.content_type,
           content_video_id: values.content_video_id,
-          main_category_id :  selectedSeries.main_category_id ,
-          sub_category_id:   selectedSeries.sub_category_id  ,
-          series_id: selectedSeries._id  ,
+          main_category_id: selectedSeries.main_category_id,
+          sub_category_id: selectedSeries.sub_category_id,
+          series_id: selectedSeries._id,
         }, {
           withCredentials: true,
         });
-        
+
         toast.success("Video Content Created");
         console.log(createVideoContent.data);
         resetForm();
         handleClose();
       } catch (error) {
-         console.error("Failed to create video content")
+        console.error("Failed to create video content")
       } finally {
         setLoading(false);
       }
@@ -101,11 +103,11 @@ const Video = () => {
         variant="contained"
         sx={{ backgroundColor: "#475be8", "&:hover": { backgroundColor: "#3a4db7" } }}
       >
-        Add Video
+        Add Content
       </Button>
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
         <DialogTitle>
-          Video Upload
+          Content Upload
           <IconButton onClick={handleClose} style={{ float: "right" }}>
             <CloseIcon color="primary" />
           </IconButton>
@@ -125,6 +127,35 @@ const Video = () => {
                 error={touched.title && Boolean(errors.title)}
                 helperText={touched.title && errors.title}
               />
+              <Select
+                label="Content Type"
+                className="rounded-md"
+                name="content_type"
+                fullWidth
+                value={values.content_type}
+                onChange={handleChange}
+                error={touched.content_type && Boolean(errors.content_type)}
+                displayEmpty
+                placeholder="Select Content Type"
+                sx={{
+                  '& .MuiSelect-root': {
+                    padding: '10px', // Adjust padding as needed
+                  },
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: '8px', // Adjust border radius as needed
+                  },
+                  '& .MuiSelect-select': {
+                    paddingTop: '12px',
+                    paddingBottom: '12px',
+                  },
+                }}
+              >
+                <MenuItem value="" disabled>
+                  Select Content Type
+                </MenuItem>
+                <MenuItem value="video">Video</MenuItem>
+                <MenuItem value="audio">Audio</MenuItem>
+              </Select>
               <TextField
                 label="Description"
                 className="rounded-md"
@@ -140,9 +171,9 @@ const Video = () => {
                 helperText={touched.description && errors.description}
               />
               <TextField
-                label="Video URL"
+                label="Content URL"
                 className="rounded-md"
-                placeholder="Enter YouTube Video URL"
+                placeholder="Enter YouTube Video or Audio URL"
                 variant="outlined"
                 name="video_url"
                 fullWidth
@@ -152,9 +183,9 @@ const Video = () => {
                 helperText={touched.video_url && errors.video_url}
               />
               <TextField
-                label="Video Thumbnail"
+                label="Content Thumbnail"
                 className="rounded-md"
-                placeholder="Enter Video Thumbnail URL"
+                placeholder="Enter Video or Audio Thumbnail URL"
                 variant="outlined"
                 name="video_thumbnail"
                 fullWidth
@@ -205,7 +236,7 @@ const Video = () => {
                 sx={{ backgroundColor: "#475be8", "&:hover": { backgroundColor: "#3a4db7" } }}
                 disabled={loading}
               >
-                { loading ? "Submitting..." : "Submit" }
+                {loading ? "Submitting..." : "Submit"}
               </Button>
             </Stack>
           </form>
@@ -218,4 +249,4 @@ const Video = () => {
   );
 };
 
-export default Video;
+export default Content;
