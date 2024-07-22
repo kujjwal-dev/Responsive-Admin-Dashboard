@@ -49,7 +49,7 @@ const validationSchema = Yup.object({
 });
 
 const Content = () => {
-  const { selectedSeries } = useContext(CategoryContext);
+  const { selectedSeries, getVideoContent } = useContext(CategoryContext);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -88,6 +88,7 @@ const Content = () => {
         console.log(createVideoContent.data);
         resetForm();
         handleClose();
+        getVideoContent();
       } catch (error) {
         console.error("Failed to create video content")
       } finally {
