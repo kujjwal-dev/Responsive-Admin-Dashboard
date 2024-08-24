@@ -17,7 +17,7 @@ import { Box, Button, TextField } from '@mui/material';
 import toast from 'react-hot-toast';
 
 const AudioContent = () => {
-  const { videos, getVideoContent, selectedSeries , updateVideoContent, deleteVideoContent } = useContext(CategoryContext);
+  const { videos, getVideoContent, selectedSeries, updateVideoContent, deleteVideoContent } = useContext(CategoryContext);
   const [open, setOpen] = useState(false);
   const [selectedAudio, setSelectedAudio] = useState(null);
   const [editMode, setEditMode] = useState(false);
@@ -52,45 +52,45 @@ const AudioContent = () => {
 
   const handleEdit = () => {
     setEditMode(true);
-};
+  };
 
-const handleSave = async () => {
-  if (selectedAudio) {
+  const handleSave = async () => {
+    if (selectedAudio) {
       await updateVideoContent(selectedAudio.id, audioData);
       setEditMode(false);
       setSelectedAudio({ ...selectedAudio, ...audioData }); // Update selectedAudio with edited data
       setOpen(true); // Redirect to main dialog
       toast.success('Content Updated');
       getVideoContent();
-  }
-};
+    }
+  };
 
-const handleChange = (e) => {
-  const { name, value } = e.target;
-  setAudioData(prevData => ({ ...prevData, [name]: value }));
-};
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setAudioData(prevData => ({ ...prevData, [name]: value }));
+  };
 
-const handleDelete = async () => {
-  if (selectedAudio) {
+  const handleDelete = async () => {
+    if (selectedAudio) {
       setConfirmDeleteOpen(true);
-  }
-};
+    }
+  };
 
-const confirmDelete = async () => {
-  if (selectedAudio) {
+  const confirmDelete = async () => {
+    if (selectedAudio) {
       await deleteVideoContent(selectedAudio.id);
       setConfirmDeleteOpen(false);
       handleClose();
       getVideoContent();
-  }
-};
+    }
+  };
 
 
 
 
   // Filter audio content based on selected series through series id and content type
-  const filteredAudios = videos.filter(video => 
-    video.series_id === selectedSeries?._id && 
+  const filteredAudios = videos.filter(video =>
+    video.series_id === selectedSeries?._id &&
     video.content_type === 'audio' &&
     (video.title.toLowerCase().includes(search.toLowerCase()) || video.class_grade.toLowerCase().includes(search.toLowerCase()))
   );
@@ -100,11 +100,16 @@ const confirmDelete = async () => {
     <>
       <TextField
         label="Search by Title or Class"
-        variant='outlined'
+        variant="outlined"
         fullWidth
-        margin='normal'
+        margin="normal"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
+        sx={{
+          '& .MuiOutlinedInput-root': {
+            borderRadius: '8px',
+          },
+        }}
       />
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="audio table">

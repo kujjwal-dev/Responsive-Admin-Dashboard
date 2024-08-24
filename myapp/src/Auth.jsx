@@ -15,7 +15,9 @@ const Auth = () => {
         const response = await Axios.get("http://localhost:3001/api/v1/auth/me", {
           withCredentials: true,
         });
+        console.log("me", response)
         setUser(response?.data.success);
+        console.log(response)
       } catch (error) {
         console.log(error);
       }

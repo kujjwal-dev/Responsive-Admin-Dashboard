@@ -97,11 +97,16 @@ export default function VideoContent() {
         <>
             <TextField
                 label="Search by Title or Class"
-                variant='outlined'
+                variant="outlined"
                 fullWidth
-                margin='normal'
+                margin="normal"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
+                sx={{
+                    '& .MuiOutlinedInput-root': {
+                        borderRadius: '8px',
+                    },
+                }}
             />
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 650 }} aria-label="video table">
