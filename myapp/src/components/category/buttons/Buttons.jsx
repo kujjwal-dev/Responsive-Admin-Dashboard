@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import Content from './Content';
 import DisplayContent from './displaycontent/DisplayContent';
 import { CategoryContext } from '../../../context/CategoryContext';
+import { ContentProvider } from '../../../context/ContentContext';
 
 const Buttons = () => {
 
@@ -19,10 +20,12 @@ const Buttons = () => {
 
           <br />
           <br />
-          <Content />
+          
           <br />
           <br />
+          <ContentProvider>
           <DisplayContent />
+          </ContentProvider>
         </div>
       )}
 
